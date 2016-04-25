@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Lil Markov Chainz</title>
+    <style type="text/css" media="screen">
+      body {
+        width: 500px;
+        margin: 100px auto;
+      }
+      footer, footer a { color: #ccc; }
+
+      pre {
+        font-size: 1.25em;
+        line-height: 1.5em;
+      }
+    </style>
+  </head>
+  <body>
+  <pre id="txt"></pre>
+  <footer>
+    Three parts Tha Carter IV, one part Math.random().<br/>
+    Generated with <a href="https://github.com/skazhy/lil-markov-chainz">a thing I wrote</a>.
+  </footer>
+  <script src="chainz.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" charset="utf-8">
+    var render = function(dataArr) {
+      document.getElementById("txt").innerHTML = PS.Main.gen(dataArr)();
+    }
+
+    // TODO: Load this via PureScript
+    var cachedData = localStorage.getItem("markov-txt");
+    if (cachedData) {
+      render(JSON.parse(cachedData));
+    } else {
+      var request = new XMLHttpRequest();
+        request.open('GET', 'http://pastebin.com/raw.php?i=Hfbmv0Yc', true);
+        request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+          var dataArr = JSON.parse(request.responseText).lines;
+          render(dataArr);
+          localStorage.setItem("markov-txt", JSON.stringify(dataArr));
+        }
+      };
+      request.send();
+    }
+  </script>
+</body>
+</html>
